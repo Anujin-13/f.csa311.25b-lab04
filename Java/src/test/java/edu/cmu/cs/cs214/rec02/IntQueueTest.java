@@ -38,8 +38,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-    //    mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+       mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
@@ -52,20 +52,37 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
     public void testPeekEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        // Хоосон үед peek() хийхэд null буцаах ёстой
+        assertNull(mQueue.peek());
     }
 
     @Test
     public void testPeekNoEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(10);
+        mQueue.enqueue(20);
+        // Эхний орсон элемент харагдах ёстой (10)
+        assertEquals(Integer.valueOf(10), mQueue.peek());
+    }
+
+    @Test
+    public void testDequeue() {
+        mQueue.enqueue(10);
+        mQueue.enqueue(20);
+        mQueue.enqueue(30);
+        
+        // Зөв дарааллаар гарч ирж байгааг шалгах
+        assertEquals(Integer.valueOf(10), mQueue.dequeue());
+        assertEquals(Integer.valueOf(20), mQueue.dequeue());
+        assertEquals(Integer.valueOf(30), mQueue.dequeue());
+        
+        // Дууссаны дараа хоосон байх ёстой
+        assertTrue(mQueue.isEmpty());
     }
 
     @Test
@@ -78,11 +95,7 @@ public class IntQueueTest {
         }
     }
 
-    @Test
-    public void testDequeue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
-    }
+    
 
     @Test
     public void testContent() throws IOException {
@@ -104,6 +117,36 @@ public class IntQueueTest {
             }
         }
     }
+    @Test
+    public void testClear() {
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        mQueue.clear();
+        assertTrue(mQueue.isEmpty());
+        assertEquals(0, mQueue.size());
+        assertNull(mQueue.peek());
+    }
 
+    @Test
+    public void testEnsureCapacity() {
+        // INITIAL_SIZE нь 10 байгаа. 
+        // Түүнээс олон элемент нэмж массивыг томсгох нөхцөлийг шалгана.
+        for (int i = 0; i < 20; i++) {
+            mQueue.enqueue(i);
+        }
+        assertEquals(20, mQueue.size());
+        
+        // Элементүүд зөв дарааллаараа байгаа эсэхийг шалгах
+        for (int i = 0; i < 20; i++) {
+            assertEquals(Integer.valueOf(i), mQueue.dequeue());
+        }
+    }
+
+    @Test
+    public void testDequeueEmpty() {
+        // Хоосон үед null буцааж байгаа эсэхийг шалгаснаар dequeue 100% болно
+        mQueue.clear();
+        assertNull(mQueue.dequeue());
+    }
 
 }
